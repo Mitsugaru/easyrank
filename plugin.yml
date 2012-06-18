@@ -1,0 +1,11 @@
+name: EasyRank
+author: milkywayz 
+main: net.milkycraft.EasyRank
+version: 1.1
+depend: [Vault]
+
+commands:
+    rank:
+      aliases: promote
+
+  

@@ -1,0 +1,4 @@
+# Welcome to the EasyRank config v1.1
+Easyrank:
+  Allow:
+    Ranking-Offline-Players: true
