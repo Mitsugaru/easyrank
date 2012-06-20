@@ -12,19 +12,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public abstract class ConfigLoader {
 
-	/** The file name. */
 	protected String fileName;
-
-	/** The config file. */
 	protected File configFile;
-
-	/** The data folder. */
 	protected File dataFolder;
-
-	/** The plugin. */
 	protected final EasyRank plugin;
-
-	/** The config. */
 	protected static FileConfiguration config;
 
 	/**
