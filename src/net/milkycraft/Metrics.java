@@ -19,63 +19,50 @@ import java.net.URLEncoder;
 import java.util.UUID;
 import java.util.logging.Level;
 
+/**
+ * The Class Metrics.
+ */
 public class Metrics {
 
-	/**
-	 * The current revision number
-	 */
+	/** The current revision number. */
 	private final static int REVISION = 5;
 
-	/**
-	 * The base url of the metrics domain
-	 */
+	/** The base url of the metrics domain. */
 	private static final String BASE_URL = "http://mcstats.org";
 
-	/**
-	 * The url used to report a server's status
-	 */
+	/** The url used to report a server's status. */
 	private static final String REPORT_URL = "/report/%s";
 
-	/**
-	 * The file where guid and opt out is stored in
-	 */
+	/** The file where guid and opt out is stored in. */
 	private static final String CONFIG_FILE = "plugins/PluginMetrics/config.yml";
 
-	/**
-	 * Interval of time to ping (in minutes)
-	 */
+	/** Interval of time to ping (in minutes). */
 	private final static int PING_INTERVAL = 10;
 
-	/**
-	 * The plugin this metrics submits for
-	 */
+	/** The plugin this metrics submits for. */
 	private final Plugin plugin;
 
-	/**
-	 * The plugin configuration file
-	 */
+	/** The plugin configuration file. */
 	private final YamlConfiguration configuration;
 
-	/**
-	 * The plugin configuration file
-	 */
+	/** The plugin configuration file. */
 	private final File configurationFile;
 
-	/**
-	 * Unique server id
-	 */
+	/** Unique server id. */
 	private final String guid;
 
-	/**
-	 * Lock for synchronization
-	 */
+	/** Lock for synchronization. */
 	private final Object optOutLock = new Object();
 
-	/**
-	 * Id of the scheduled task
-	 */
+	/** Id of the scheduled task. */
 	private volatile int taskId = -1;
 
+	/**
+	 * Instantiates a new metrics.
+	 *
+	 * @param plugin the plugin
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public Metrics(Plugin plugin) throws IOException {
 		if (plugin == null) {
 			throw new IllegalArgumentException("Plugin cannot be null");
@@ -166,9 +153,9 @@ public class Metrics {
 	}
 
 	/**
-	 * Has the server owner denied plugin metrics?
-	 * 
-	 * @return
+	 * Has the server owner denied plugin metrics?.
+	 *
+	 * @return true, if is opt out
 	 */
 	public boolean isOptOut() {
 		synchronized (optOutLock) {
@@ -191,8 +178,8 @@ public class Metrics {
 	/**
 	 * Enables metrics for the server by setting "opt-out" to false in the
 	 * config file and starting the metrics task.
-	 * 
-	 * @throws IOException
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public void enable() throws IOException {
 		// This has to be synchronized or it can collide with the check in the
@@ -215,8 +202,8 @@ public class Metrics {
 	/**
 	 * Disables metrics for the server by setting "opt-out" to true in the
 	 * config file and canceling the metrics task.
-	 * 
-	 * @throws IOException
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public void disable() throws IOException {
 		// This has to be synchronized or it can collide with the check in the
@@ -238,7 +225,10 @@ public class Metrics {
 	}
 
 	/**
-	 * Generic method that posts a plugin to the metrics website
+	 * Generic method that posts a plugin to the metrics website.
+	 *
+	 * @param isPing the is ping
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	private void postPlugin(boolean isPing) throws IOException {
 		// The plugin's description file containg all of the plugin data such as
@@ -302,8 +292,8 @@ public class Metrics {
 	/**
 	 * Check if mineshafter is present. If it is, we need to bypass it to send
 	 * POST requests
-	 * 
-	 * @return
+	 *
+	 * @return true, if is mineshafter present
 	 */
 	private boolean isMineshafterPresent() {
 		try {
@@ -324,11 +314,11 @@ public class Metrics {
 	 * data.append(encode("guid")).append('=').append(encode(guid));
 	 * encodeDataPair(data, "version", description.getVersion());
 	 * </code>
-	 * 
-	 * @param buffer
-	 * @param key
-	 * @param value
-	 * @return
+	 *
+	 * @param buffer the buffer
+	 * @param key the key
+	 * @param value the value
+	 * @throws UnsupportedEncodingException the unsupported encoding exception
 	 */
 	private static void encodeDataPair(final StringBuilder buffer,
 			final String key, final String value)
@@ -338,10 +328,11 @@ public class Metrics {
 	}
 
 	/**
-	 * Encode text as UTF-8
-	 * 
-	 * @param text
-	 * @return
+	 * Encode text as UTF-8.
+	 *
+	 * @param text the text
+	 * @return the string
+	 * @throws UnsupportedEncodingException the unsupported encoding exception
 	 */
 	private static String encode(String text)
 			throws UnsupportedEncodingException {
