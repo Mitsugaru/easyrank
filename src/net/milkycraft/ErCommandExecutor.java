@@ -18,7 +18,7 @@ import ru.tehkode.permissions.bukkit.commands.PermissionsCommand;
 public class ErCommandExecutor extends PermissionsCommand implements CommandExecutor {
 	
 	/** The plugin. */
-	private final EasyRank plugin;
+	private static EasyRank plugin;
 	
 	/**
 	 * Instantiates a new er command executor.
@@ -26,7 +26,7 @@ public class ErCommandExecutor extends PermissionsCommand implements CommandExec
 	 * @param plugin the plugin
 	 */
 	public ErCommandExecutor(EasyRank plugin) {
-		this.plugin = plugin;
+		ErCommandExecutor.plugin = plugin;
 	}
 
 	/* /rank player group */
@@ -57,13 +57,13 @@ public class ErCommandExecutor extends PermissionsCommand implements CommandExec
 						+ "You dont have permission to rank to " + rank);
 				return true;
 			}
-			if (EasyRank.perms.getPrimaryGroup(target).equalsIgnoreCase(rank)) {
+			if (plugin.getVaultPerms().getPrimaryGroup(target).equalsIgnoreCase(rank)) {
 				sender.sendMessage(ChatColor.RED + carget + " is already a "
 						+ rank);
 				return true;
 			}
 			removeOldRanks(target);
-			EasyRank.perms.playerAddGroup(target, rank);
+			plugin.getVaultPerms().playerAddGroup(target, rank);
 			sender.sendMessage(ChatColor.GRAY + "Sucessfully ranked "
 					+ ChatColor.YELLOW + carget + ChatColor.GRAY + " to "
 					+ ChatColor.GOLD + rank);
@@ -84,8 +84,8 @@ public class ErCommandExecutor extends PermissionsCommand implements CommandExec
 	 * @param player the player
 	 */
 	protected static void removeOldRanks(Player player) {
-		for (String r : EasyRank.perms.getPlayerGroups(player)) {
-			EasyRank.perms.playerRemoveGroup(player, r);
+		for (String r : plugin.getVaultPerms().getPlayerGroups(player)) {
+			plugin.getVaultPerms().playerRemoveGroup(player, r);
 		}
 
 	}
@@ -105,7 +105,7 @@ public class ErCommandExecutor extends PermissionsCommand implements CommandExec
 		final String rank = Character.toUpperCase(split[1].charAt(0))
 				+ split[1].substring(1);
 		removeOldRanks(target);
-		if(EasyRank.pex != null) {
+		if(plugin.getPEX() != null) {
 			groupUsersAdd(plugin, sender, split);
 		} else {
 			/*bPermissions rank*/
@@ -142,14 +142,14 @@ public class ErCommandExecutor extends PermissionsCommand implements CommandExec
 						.getDisplayName();
 				final String rank = Character.toUpperCase(split[1].charAt(0))
 						+ split[1].substring(1);
-				if (EasyRank.perms.getPrimaryGroup(target).equalsIgnoreCase(rank)) {
+				if (plugin.getVaultPerms().getPrimaryGroup(target).equalsIgnoreCase(rank)) {
 					EasyRank.writeInfo(carget + " is already a " + rank);
 					return true;
 				}
 				removeOldRanks(target);
-				EasyRank.perms.playerAddGroup(target, rank);
+				plugin.getVaultPerms().playerAddGroup(target, rank);
 
-				if (EasyRank.perms.getPrimaryGroup(target).equalsIgnoreCase(rank)) {
+				if (plugin.getVaultPerms().getPrimaryGroup(target).equalsIgnoreCase(rank)) {
 					EasyRank.writeInfo("Sucessfully ranked " + carget + " to " + rank);
 					target.sendMessage(ChatColor.GRAY
 							+ "Console ranked you to " + ChatColor.YELLOW
@@ -164,7 +164,7 @@ public class ErCommandExecutor extends PermissionsCommand implements CommandExec
 					final String rank = Character.toUpperCase(split[1]
 							.charAt(0)) + split[1].substring(1);
 					removeOldRanks(target);
-					EasyRank.perms.playerAddGroup(target, rank);
+					plugin.getVaultPerms().playerAddGroup(target, rank);
 					EasyRank.writeInfo("Ranked " + carget + " to " + rank);
 				}
 			}

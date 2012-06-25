@@ -1,7 +1,5 @@
 package net.milkycraft;
 
-
-import java.io.File;
 import java.io.IOException;
 
 import net.milkbowl.vault.permission.Permission;
@@ -19,26 +17,22 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
  */
 public class EasyRank extends JavaPlugin{
 
-	public static Permission perms = null;
-	public static EasyRank main;
-	public static String maindirectory;
+	private Permission perms = null;
 	private ErCommandExecutor ce;
-	protected static PermissionsEx pex;
-	protected static ApiLayer bperms;
+	private PermissionsEx pex;
+	private ApiLayer bperms;
 	/* (non-Javadoc)
 	 * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
 	 */
 	@Override
 	public void onEnable() {
-		main = this;
 		setUpPermissions();
 		setUpExecutors();	
 		Settings config = new Settings(this);
 		config.load();
 		Metrics metrics = null;
-		maindirectory = getDataFolder().getPath() + File.separator;
 		try {
-			metrics = new Metrics(main);
+			metrics = new Metrics(this);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -91,7 +85,7 @@ public class EasyRank extends JavaPlugin{
  		final Plugin pex = getServer().getPluginManager().getPlugin("PermissionsEx");
  		if(pex == null) {
  		} else {
- 			EasyRank.pex = (PermissionsEx) pex;
+ 			this.pex = (PermissionsEx) pex;
  			writeInfo("[EasyRank] Sucessfully hooked into PermissionsEx");
  		}
  	}
@@ -99,10 +93,25 @@ public class EasyRank extends JavaPlugin{
  		final Plugin bperms = getServer().getPluginManager().getPlugin("bPermissions");
  		if(bperms == null) {		
  		} else {
- 			EasyRank.bperms = (ApiLayer) bperms;
+ 			this.bperms = (ApiLayer) bperms;
  			writeInfo("[EasyRank] Sucessfully hooked into bPermissions");
  		}
  		
+ 	}
+ 	
+ 	public Permission getVaultPerms()
+ 	{
+ 		return perms;
+ 	}
+ 	
+ 	public PermissionsEx getPEX()
+ 	{
+ 		return pex;
+ 	}
+ 	
+ 	public ApiLayer getbPerms()
+ 	{
+ 		return bperms;
  	}
 	 
 	 /**
@@ -121,14 +130,5 @@ public class EasyRank extends JavaPlugin{
  	 */
  	public static void writeWarn(String warn) {
 		 java.util.logging.Logger.getLogger("Minecraft").warning(warn);
-	 }
-	 
-	 /**
- 	 * Gets the main class.
- 	 *
- 	 * @return the main
- 	 */
- 	public static final EasyRank getMain() {
-		 return main;
 	 }
 }
